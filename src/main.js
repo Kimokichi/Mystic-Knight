@@ -1,19 +1,19 @@
 import Phaser from 'phaser'
 
-import HelloWorldScene from './HelloWorldScene'
+import MysticKnightScene from './scenes/MysticKnightScene'
 
 const config = {
 	type: Phaser.AUTO,
 	parent: 'app',
-	width: 800,
-	height: 600,
+	width: 720,
+	height: 405,
 	physics: {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
 		},
 	},
-	scene: [HelloWorldScene],
+	scene: [MysticKnightScene],
 }
 
 export default new Phaser.Game(config)
