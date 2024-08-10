@@ -13,10 +13,18 @@ export default class MysticKnightScene extends Phaser.Scene{
             frameWidth : 50,
             frameHeight : 37
         })
+        this.load.image('tile','images/rumput.png')
     }
     create(){
         this.add.image(360,201,'background').setScale(1.5)
         this.add.image(360,201,'knight')
+        this.add.image(38,390,'tile')
+        this.groundPlatform = this.add.group({
+            // @ts-ignore
+            key : 'tile',
+            repeat : 10,
+            setXY : {x : 38,y : 390, stepX : 48}
+        })
     }
     update(){
 
