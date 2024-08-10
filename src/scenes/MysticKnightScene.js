@@ -5,7 +5,7 @@ export default class MysticKnightScene extends Phaser.Scene{
         super('mystic-knight-scene')
     }
     init(){
-
+        this.player = undefined
     }
     preload(){
         this.load.image('background','images/background.png')
@@ -17,14 +17,16 @@ export default class MysticKnightScene extends Phaser.Scene{
     }
     create(){
         this.add.image(360,201,'background').setScale(1.5)
-        this.add.image(360,201,'knight')
         this.add.image(38,390,'tile')
         this.groundPlatform = this.add.group({
             // @ts-ignore
             key : 'tile',
-            repeat : 10,
+            repeat : 15,
             setXY : {x : 38,y : 390, stepX : 48}
         })
+        this.player = this.physics.add.sprite(360,201,'knight')
+        this.player.setCollideWorldBounds(true)
+        this.physics.add.collider(this.player,this.groundPlatform)
     }
     update(){
 
