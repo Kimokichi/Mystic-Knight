@@ -45,7 +45,7 @@ export default class MysticKnightScene extends Phaser.Scene{
             this.platformTree1.create(38 + (i * 78),245,'pohon1').setScale(0.75)
         }
         // Tambahkan pemain
-        this.player = this.physics.add.sprite(360, 200, 'knight');
+        this.player = this.physics.add.sprite(360, 200, 'knight').setScale(1.3);
         // Set properti fisik pemain
         this.player.setCollideWorldBounds(true);
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
@@ -109,6 +109,11 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.anims.create({
             key : 'jumping',
             frames : this.anims.generateFrameNumbers('knight',{start : 16,end : 17}),
+            frameRate : 10
+        })
+        this.anims.create({
+            key : 'attack',
+            frames : this.anims.generateFrameNumbers('knight',{start : 92,end : 96}),
             frameRate : 10
         })
     }
