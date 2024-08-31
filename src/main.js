@@ -1,6 +1,10 @@
 import Phaser from 'phaser'
 
 import MysticKnightScene from './scenes/MysticKnightScene'
+import Stage2Scene from './scenes/Stage2Scene'
+import StageBossScene from './scenes/StageBossScene'
+import StartScene from './scenes/StartScene'
+import WinScene from './scenes/WinScene'
 
 const config = {
 	type: Phaser.AUTO,
@@ -14,7 +18,7 @@ const config = {
 			debug : true
 		},
 	},
-	scene: [MysticKnightScene],
+	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene],
 }
 
 export default new Phaser.Game(config)
