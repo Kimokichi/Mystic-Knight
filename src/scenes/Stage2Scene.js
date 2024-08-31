@@ -17,11 +17,12 @@ export default class Stage2Scene extends Phaser.Scene{
             frameHeight : 37
         })
         this.load.image('tile','images/rumput2.png')
-        this.load.spritesheet('musuh1','images/musuh1.png',{
+        this.load.spritesheet('musuh2','images/Musuh 2/Idle/Idle-Sheet.png',{
             frameWidth :48,
             frameHeight : 32
         })
         this.load.image('pohon2','images/Pohon2.png')
+        this.load.image('awan','images/Awan1.png')
     }
     create(){
         // this.add.image(360,201,'background').setScale(1.5)
@@ -44,6 +45,16 @@ export default class Stage2Scene extends Phaser.Scene{
         for (let i = 0; i < 15; i++) {
             this.groundPlatform.create(38 + (i * 48), 380, 'tile').setScale(2).setOffset(-20, -13);
         }
+        this.awanKeren = this.physics.add.staticGroup()
+        for (let i = 0; i < 7; i++) {
+            this.awanKeren.create(38 + (i * 108), 50, 'awan').setScale(1.7)
+        }
+        this.enemy = this.physics.add.sprite(360, 200, 'musuh2').setScale(1.3);
+        // Set properti fisik pemain
+        this.enemy.setCollideWorldBounds(true);
+        this.enemy.setBounce(0.2); // Opsional, untuk memberi efek pantulan
+        // Tambahkan collider antara pemain dan platform
+        this.physics.add.collider(this.enemy, this.groundPlatform);
         // Tambahkan pemain
         this.player = this.physics.add.sprite(360, 200, 'knight').setScale(1.3);
         // Set properti fisik pemain
@@ -53,7 +64,6 @@ export default class Stage2Scene extends Phaser.Scene{
         this.physics.add.collider(this.player, this.groundPlatform);
         this.cursor=this.input.keyboard.createCursorKeys()
         this.createAnimation()
-        this.add.image(360,365,'musuh1')
     }
     update(){
         if(this.cursor.left.isDown){
