@@ -9,19 +9,21 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.cursor = undefined
     }
     preload(){
-        this.load.image('background','images/background.png')
+        this.load.image('bg1','images/plx-1.png')
+        this.load.image('bg2','images/plx-2.png')
+        this.load.image('bg3','images/plx-3.png')
+        this.load.image('bg4','images/plx-4.png')
+        this.load.image('bg5','images/plx-5.png')
         this.load.spritesheet('knight','images/knight.png',{
             frameWidth : 50,
             frameHeight : 37
         })
-        this.load.image('tile','images/rumput.png')
+        this.load.image('tile','images/Rumput2.png')
         this.load.spritesheet('musuh1','images/musuh1.png',{
             frameWidth :48,
             frameHeight : 32
         })
         this.load.image('pohon1','images/Pohon1.png')
-        this.load.image('awan1','images/awan1.png')
-        this.load.image('awan2','images/awan2.png')
     }
     create(){
         // this.add.image(360,201,'background').setScale(1.5)
@@ -35,24 +37,16 @@ export default class MysticKnightScene extends Phaser.Scene{
         // this.player = this.physics.add.sprite(360,201,'knight')
         // this.player.setCollideWorldBounds(true)
         // this.physics.add.collider(this.player,this.groundPlatform)
-        this.add.image(360, 201, 'background').setScale(1.5);
+        this.add.image(360, 201, 'bg1').setScale(2);
+        this.add.image(360, 201, 'bg2').setScale(2);
+        this.add.image(360, 201, 'bg3').setScale(2);
+        this.add.image(360, 201, 'bg4').setScale(2);
+        this.add.image(360, 201, 'bg5').setScale(2);
         // Buat grup untuk platform dengan fisika statis
         this.groundPlatform = this.physics.add.staticGroup();
         // Tambahkan platform ke grup
         for (let i = 0; i < 15; i++) {
-            this.groundPlatform.create(38 + (i * 48), 390, 'tile').setScale(1).setOffset(-20, 10);
-        }
-        this.platformTree1 = this.physics.add.staticGroup();
-        for(let i = 0; i < 9; i++){
-            this.platformTree1.create(38 + (i * 78),245,'pohon1').setScale(0.75)
-        }
-        this.platformAwan1 = this.physics.add.staticGroup();
-        for(let i = 0; i < 7; i++){
-            this.platformAwan1.create(38 + (i * 88),50,'awan1').setScale(2)
-        }
-        this.platformAwan2 = this.physics.add.staticGroup();
-        for(let i = 0; i < 8; i++){
-            this.platformAwan2.create(38 + (i * 98),70,'awan2').setScale(1.25)
+            this.groundPlatform.create(38 + (i * 48), 380, 'tile').setScale(2).setOffset(-20, -13);
         }
         // Tambahkan pemain
         this.player = this.physics.add.sprite(360, 200, 'knight').setScale(1.3);
@@ -102,6 +96,9 @@ export default class MysticKnightScene extends Phaser.Scene{
         // Play standby animation when not moving
         if (!this.cursor.left.isDown && !this.cursor.right.isDown && !this.cursor.up.isDown) {
             this.player.anims.play('idle', true);
+        }
+        if(this.player.x > 680){
+            this.scene.start('stage-boss-scene')
         }
     }
     createAnimation(){

@@ -15,10 +15,11 @@ const config = {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
-			debug : true
+			// debug : true
 		},
 	},
-	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene],
+	scene: [Stage2Scene,StartScene,MysticKnightScene,StageBossScene,WinScene],
+	// scene: [MysticKnightScene,StageBossScene],
 }
 
 export default new Phaser.Game(config)

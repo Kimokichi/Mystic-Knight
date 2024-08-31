@@ -14,7 +14,7 @@ export default class StageBossScene extends Phaser.Scene{
             frameWidth : 50,
             frameHeight : 37
         })
-        this.load.image('tile','images/rumput.png')
+        this.load.image('tile1','images/Rumput1.png')
         this.load.spritesheet('boss','images/boss.png',{
             frameWidth : 140,
             frameHeight : 93
@@ -37,10 +37,10 @@ export default class StageBossScene extends Phaser.Scene{
         this.groundPlatform = this.physics.add.staticGroup();
         // Tambahkan platform ke grup
         for (let i = 0; i < 15; i++) {
-            this.groundPlatform.create(38 + (i * 48), 390, 'tile').setScale(1).setOffset(-20, 10);
+            this.groundPlatform.create(38 + (i * 48), 380, 'tile1').setScale(2).setOffset(-20, 10);
         }
         // Tambahkan pemain
-        this.player = this.physics.add.sprite(360, 200, 'knight').setScale(1.3);
+        this.player = this.physics.add.sprite(30, 310, 'knight').setScale(1.3);
         // Set properti fisik pemain
         this.player.setCollideWorldBounds(true);
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
