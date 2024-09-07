@@ -56,7 +56,7 @@ export default class Stage2Scene extends Phaser.Scene{
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.enemy, this.groundPlatform);
         // Tambahkan pemain
-        this.player = this.physics.add.sprite(360, 200, 'knight').setScale(1.3);
+        this.player = this.physics.add.sprite(30, 200, 'knight').setScale(1.3);
         // Set properti fisik pemain
         this.player.setCollideWorldBounds(true);
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
@@ -102,6 +102,9 @@ export default class Stage2Scene extends Phaser.Scene{
         // Play standby animation when not moving
         if (!this.cursor.left.isDown && !this.cursor.right.isDown && !this.cursor.up.isDown) {
             this.player.anims.play('idle', true);
+        }
+        if(this.player.x > 680){
+            this.scene.start('stage-boss-scene')
         }
     }
     createAnimation(){
