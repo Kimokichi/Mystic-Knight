@@ -18,8 +18,8 @@ const config = {
 			// debug : true
 		},
 	},
-	scene: [MysticKnightScene,Stage2Scene,StageBossScene,WinScene],
-	// scene: [MysticKnightScene,StageBossScene],
+	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene],
+	// scene: [WinScene,MysticKnightScene,StageBossScene],
 }
 
 export default new Phaser.Game(config)

@@ -9,9 +9,9 @@ export default class Stage2Scene extends Phaser.Scene{
         this.cursor = undefined
     }
     preload(){
-        this.load.image('bg1','images/bg1.png')
-        this.load.image('bg2','images/bg2.png')
-        this.load.image('bg3','images/bg3.png')
+        this.load.image('bg01','images/bg1.png')
+        this.load.image('bg02','images/bg2.png')
+        this.load.image('bg03','images/bg3.png')
         this.load.spritesheet('knight','images/knight.png',{
             frameWidth : 50,
             frameHeight : 37
@@ -36,9 +36,9 @@ export default class Stage2Scene extends Phaser.Scene{
         // this.player = this.physics.add.sprite(360,201,'knight')
         // this.player.setCollideWorldBounds(true)
         // this.physics.add.collider(this.player,this.groundPlatform)
-        this.add.image(360, 201, 'bg1').setScale(2.5);
-        this.add.image(360, 201, 'bg2').setScale(2.5);
-        this.add.image(360, 201, 'bg3').setScale(2.5);
+        this.add.image(360, 201, 'bg01').setScale(2.5);
+        this.add.image(360, 201, 'bg02').setScale(2.5);
+        this.add.image(360, 201, 'bg03').setScale(2.5);
         // Buat grup untuk platform dengan fisika statis
         this.groundPlatform = this.physics.add.staticGroup();
         // Tambahkan platform ke grup
