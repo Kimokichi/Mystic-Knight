@@ -53,7 +53,8 @@ export default class StageBossScene extends Phaser.Scene{
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.boss, this.groundPlatform);
         this.cursor=this.input.keyboard.createCursorKeys()
-        this.createAnimation()     
+        this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.createAnimation()
     }
     update(){
         if(this.cursor.left.isDown){
@@ -82,7 +83,7 @@ export default class StageBossScene extends Phaser.Scene{
                 isJumping = false;
             });
         }
-        
+        this.boss.anims.play('bossidle',true)
         // Diagonal Jumping (left and up or right and up)
         if ((this.cursor.left.isDown && this.cursor.up.isDown) || (this.cursor.right.isDown && this.cursor.up.isDown)) {
             // Adjust velocity to make diagonal jumping smoother
@@ -92,6 +93,9 @@ export default class StageBossScene extends Phaser.Scene{
         // Play standby animation when not moving
         if (!this.cursor.left.isDown && !this.cursor.right.isDown && !this.cursor.up.isDown) {
             this.player.anims.play('idle', true);
+        }
+        if (this.attackKey.isDown) { 
+            this.attackWithKeyboard();
         }
     }
     createAnimation(){
@@ -113,10 +117,22 @@ export default class StageBossScene extends Phaser.Scene{
         })
         this.anims.create({
             key : 'attack',
-            frames : this.anims.generateFrameNumbers('knight',{start : 92,end : 96}),
+            frames : this.anims.generateFrameNumbers('knight',{start : 50,end : 58}),
             frameRate : 10
         })
         //enemy animation
-        this.anims.create
+        this.anims.create({
+            key : 'bossidle',
+            frames : this.anims.generateFrameNumbers('boss',{start : 0, end : 7}),
+            frameRate : 10,
+            repeat : -1
+        })
+    }
+    attackWithKeyboard() {
+        this.player.setVelocity(0);
+        this.player.anims.play('attack', true);
+        this.time.delayedCall(2000, () => {
+            this.player.anims.play('idle', true);
+        });
     }
 }

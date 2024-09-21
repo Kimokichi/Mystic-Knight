@@ -23,7 +23,7 @@ export default class Stage2Scene extends Phaser.Scene{
             frameWidth :48,
             frameHeight : 32
         })
-        this.load.spritesheet('musuh2jalan','images/Run-Sheet.png',{
+        this.load.spritesheet('musuh2jalan','images/Musuh 2/Run/Run-Sheet.png',{
             frameWidth : 48,
             frameHeight : 32
         })
@@ -75,8 +75,8 @@ export default class Stage2Scene extends Phaser.Scene{
                 // Atur musuh 2
                 this.enemy5Speed = 120;
                 this.enemy5Direction = -1;
-                this.enemy5LeftBound = 375;
-                this.enemy5RightBound = 400;
+                this.enemy5LeftBound = 405;
+                this.enemy5RightBound = 600;
         // Tambahkan pemain
         this.player = this.physics.add.sprite(30, 310, 'knight').setScale(1.3);
         // Set properti fisik pemain
@@ -184,7 +184,7 @@ export default class Stage2Scene extends Phaser.Scene{
         })
         this.anims.create({
             key : 'attack',
-            frames : this.anims.generateFrameNumbers('knight',{start : 92,end : 96}),
+            frames : this.anims.generateFrameNumbers('knight',{start : 50,end : 58}),
             frameRate : 10
         })
         //animasi musuh

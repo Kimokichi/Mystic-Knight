@@ -19,7 +19,7 @@ const config = {
 		},
 	},
 	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene],
-	// scene: [WinScene,MysticKnightScene,StageBossScene],
+	// scene: [StageBossScene],
 }
 
 
