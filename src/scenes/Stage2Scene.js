@@ -9,6 +9,10 @@ export default class Stage2Scene extends Phaser.Scene{
         this.cursor = undefined
         this.enemy4 = undefined
         this.enemy5 = undefined
+        this.playerAttack = false
+        this.enemyAttack = false
+        this.lifeLabel = undefined
+        this.life = 3
     }
     preload(){
         this.load.image('bg01','images/bg1.png')
@@ -84,6 +88,12 @@ export default class Stage2Scene extends Phaser.Scene{
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
+        this.lifeLabel = this.add.text(10,10,'Life', {
+            fontSize : '16px',
+            // @ts-ignore
+            fill : 'black',
+            backgroundColor : 'white',
+        }).setDepth(1)
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.createAnimation()
@@ -161,6 +171,7 @@ export default class Stage2Scene extends Phaser.Scene{
                 this.enemy5Direction = 1;
                 this.enemy5.setFlipX(true)
             }
+            this.lifeLabel.setText('Life = ' + this.life)
         if(this.player.x > 680){
             this.scene.start('stage-boss-scene')
         }
@@ -200,5 +211,15 @@ export default class Stage2Scene extends Phaser.Scene{
         this.time.delayedCall(2000, () => {
             this.player.anims.play('idle', true);
         });
+    }
+    decreaseLife(){
+        this.life--
+        if (this.life == 2){
+            this.player.setTint(0xff0000)
+        }else if (this.life == 1){
+            this.player.setTint(0xff0000).setAlpha(0.2)
+        }else if (this.life == 0){
+        this.scene.start('over-scene')
+        }
     }
 }

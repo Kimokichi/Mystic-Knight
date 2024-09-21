@@ -9,6 +9,10 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.cursor = undefined
         this.enemy1 = undefined
         this.enemy2 = undefined
+        this.playerAttack = false
+        this.enemyAttack = false
+        this.lifeLabel = undefined
+        this.life = 3
     }
     preload(){
         this.load.image('bg1','images/plx-1.png')
@@ -101,10 +105,15 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
+        this.lifeLabel = this.add.text(10,10,'Life', {
+            fontSize : '16px',
+            // @ts-ignore
+            fill : 'black',
+            backgroundColor : 'white',
+        }).setDepth(1)
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.createAnimation()
-        
     }
     update(){
         if(this.cursor.left.isDown){
@@ -189,6 +198,7 @@ export default class MysticKnightScene extends Phaser.Scene{
                 this.enemy3Direction = 1;
                 this.enemy3.setFlipX(true)
             }
+            this.lifeLabel.setText('Life = ' + this.life)
             // this.enemy1.setVelocityX(this.enemy1Speed * this.enemyDirection); 
                 // if (this.enemy1.x >= this.enemy1RightBound){ this.enemyDirection = -1; 
                 //  } else if (this.enemy1.x <= this.enemy1LeftBound) { this.enemyDirection = 1; }
@@ -234,5 +244,15 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.time.delayedCall(2000, () => {
             this.player.anims.play('idle', true);
         });
+    }
+    decreaseLife(){
+        this.life--
+        if (this.life == 2){
+            this.player.setTint(0xff0000)
+        }else if (this.life == 1){
+            this.player.setTint(0xff0000).setAlpha(0.2)
+        }else if (this.life == 0){
+        this.scene.start('over-scene')
+        }
     }
 }

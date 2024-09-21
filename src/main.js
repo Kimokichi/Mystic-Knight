@@ -5,6 +5,7 @@ import Stage2Scene from './scenes/Stage2Scene'
 import StageBossScene from './scenes/StageBossScene'
 import StartScene from './scenes/StartScene'
 import WinScene from './scenes/WinScene'
+import OverScene from './scenes/OverScene'
 
 const config = {
 	type: Phaser.AUTO,
@@ -18,7 +19,7 @@ const config = {
 			// debug : true
 		},
 	},
-	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene],
+	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene,OverScene],
 	// scene: [StageBossScene],
 }
 
