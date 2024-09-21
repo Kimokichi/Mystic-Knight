@@ -7,6 +7,8 @@ export default class MysticKnightScene extends Phaser.Scene{
     init(){
         this.player = undefined
         this.cursor = undefined
+        this.enemy1 = undefined
+        this.enemy2 = undefined
     }
     preload(){
         this.load.image('bg1','images/plx-1.png')
@@ -48,10 +50,50 @@ export default class MysticKnightScene extends Phaser.Scene{
         for (let i = 0; i < 15; i++) {
             this.groundPlatform.create(38 + (i * 48), 380, 'tile').setScale(2).setOffset(-20, -13);
         }
-        this.enemy = this.physics.add.sprite(360, 330, 'musuh1').setScale(1.3);
-        this.enemy.setCollideWorldBounds(true);
-        this.enemy.setBounce(0.2)
-        this.physics.add.collider(this.enemy, this.groundPlatform);
+        // Tambahkan musuh 1
+        this.enemy1 = this.physics.add.sprite(360, 330, 'musuh1').setScale(1.3);
+        this.enemy1.setCollideWorldBounds(true);
+        this.enemy1.setBounce(0.2);
+        this.physics.add.collider(this.enemy1, this.groundPlatform);
+        
+        // Atur musuh 1
+        this.enemy1Speed = 100;
+        this.enemy1Direction = 1;
+        this.enemy1LeftBound = 270;
+        this.enemy1RightBound = 300;
+        // Tambahkan musuh 2
+        this.enemy2 = this.physics.add.sprite(450, 330, 'musuh1').setScale(1.3);
+        this.enemy2.setCollideWorldBounds(true);
+        this.enemy2.setBounce(0.2);
+        this.physics.add.collider(this.enemy2, this.groundPlatform);
+
+        // Atur musuh 2
+        this.enemy2Speed = 120;
+        this.enemy2Direction = -1;
+        this.enemy2LeftBound = 375;
+        this.enemy2RightBound = 400;
+        // Tambahkan musuh 3
+        this.enemy3 = this.physics.add.sprite(550, 280, 'musuh1').setScale(2);
+        this.enemy3.setCollideWorldBounds(true);
+        this.enemy3.setBounce(0.2);
+        this.physics.add.collider(this.enemy3, this.groundPlatform);
+        
+        // Atur musuh 3
+        this.enemy3Speed = 100;
+        this.enemy3Direction = -1;
+        this.enemy3LeftBound = 550;
+        this.enemy3RightBound = 650;
+        // this.enemy = this.physics.add.sprite(400, 330, this.enemy).setScale(1.3); 
+        // this.enemySpeed = 100;  this.enemyDirection = 1; 
+        // this.enemyLeftBound = 300; 
+        // this.enemyRightBound = 350;
+        // this.physics.add.collider(this.enemy, this.groundPlatform);
+        // this.enemy2 = this.physics.add.sprite(450, 350, 'musuh1').setScale(1.3); 
+        // this.enemy2Speed = 100;  this.enemyDirection = 1; 
+        // this.enemy2LeftBound = 500; 
+        // this.enemy2RightBound = 550;
+        // this.enemy2.setCollideWorldBounds(true);
+        // this.physics.add.collider(this.enemy2, this.groundPlatform);
         // Tambahkan pemain
         this.player = this.physics.add.sprite(30, 310, 'knight').setScale(1.3);
         // Set properti fisik pemain
@@ -61,11 +103,6 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.physics.add.collider(this.player, this.groundPlatform);
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.enemy = this.physics.add.sprite(400, 330, this.enemy).setScale(1.3); 
-this.enemySpeed = 100;  this.enemyDirection = 1; 
- this.enemyLeftBound = 300; 
-this.enemyRightBound = 350;
-this.physics.add.collider(this.enemy, this.groundPlatform);
         this.createAnimation()
         
     }
@@ -118,12 +155,43 @@ this.physics.add.collider(this.enemy, this.groundPlatform);
             //     this.enemy.anims.play('walking',true)
             // }
             else{
-                this.enemy.setVelocity(0,200)
-                this.enemy.anims.play('idlemusuh',true)
+                this.enemy1.setVelocity(0,200)
+                this.enemy1.anims.play('walkmusuh',true)
+                this.enemy2.setVelocity(0,200)
+                this.enemy2.anims.play('walkmusuh',true)
+                this.enemy3.setVelocity(0,200)
+                this.enemy3.anims.play('walkmusuh',true)
             }
-            this.enemy.setVelocityX(this.enemySpeed * this.enemyDirection); 
-if (this.enemy.x >= this.enemyRightBound){ this.enemyDirection = -1; 
- } else if (this.enemy.x <= this.enemyLeftBound) { this.enemyDirection = 1; }
+            // Logika pergerakan musuh 1
+            this.enemy1.setVelocityX(this.enemy1Speed * this.enemy1Direction);
+            if (this.enemy1.x >= this.enemy1RightBound) {
+                this.enemy1Direction = -1;
+                this.enemy1.setFlipX(false)
+            } else if (this.enemy1.x <= this.enemy1LeftBound) {
+                this.enemy1Direction = 1;
+                this.enemy1.setFlipX(true)
+            }
+            // Logika pergerakan musuh 2
+            this.enemy2.setVelocityX(this.enemy2Speed * this.enemy2Direction);
+            if (this.enemy2.x >= this.enemy2RightBound) {
+                this.enemy2Direction = -1;
+                this.enemy2.setFlipX(false)
+            } else if (this.enemy2.x <= this.enemy2LeftBound) {
+                this.enemy2Direction = 1;
+                this.enemy2.setFlipX(true)
+            }
+            // Logika pergerakan musuh 3
+            this.enemy3.setVelocityX(this.enemy3Speed * this.enemy3Direction);
+            if (this.enemy3.x >= this.enemy3RightBound) {
+                this.enemy3Direction = -1;
+                this.enemy3.setFlipX(false)
+            } else if (this.enemy3.x <= this.enemy3LeftBound) {
+                this.enemy3Direction = 1;
+                this.enemy3.setFlipX(true)
+            }
+            // this.enemy1.setVelocityX(this.enemy1Speed * this.enemyDirection); 
+                // if (this.enemy1.x >= this.enemy1RightBound){ this.enemyDirection = -1; 
+                //  } else if (this.enemy1.x <= this.enemy1LeftBound) { this.enemyDirection = 1; }
         if(this.player.x > 680){
             this.scene.start('stage-2-scene')
         }
@@ -147,16 +215,16 @@ if (this.enemy.x >= this.enemyRightBound){ this.enemyDirection = -1;
         })
         this.anims.create({
             key : 'attack',
-            frames : this.anims.generateFrameNumbers('knight',{start : 92,end : 112}),
-            frameRate : 15,
+            frames : this.anims.generateFrameNumbers('knight',{start : 50,end : 58}),
+            frameRate : 5,
             repeat : 0
         })
 
         //animasi musuh
         this.anims.create({
-            key : 'idlemusuh',
-            frames : this.anims.generateFrameNumbers('musuh1',{start : 0, end : 2}),
-            frameRate : 5,
+            key : 'walkmusuh',
+            frames : this.anims.generateFrameNumbers('musuh1',{start : 3, end : 6}),
+            frameRate : 3,
             repeat : -1
         })
     }
