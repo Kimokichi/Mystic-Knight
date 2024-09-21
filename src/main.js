@@ -22,4 +22,5 @@ const config = {
 	// scene: [WinScene,MysticKnightScene,StageBossScene],
 }
 
+
 export default new Phaser.Game(config)

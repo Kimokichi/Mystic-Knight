@@ -49,14 +49,12 @@ export default class Stage2Scene extends Phaser.Scene{
         for (let i = 0; i < 7; i++) {
             this.awanKeren.create(38 + (i * 108), 50, 'awan').setScale(1.7)
         }
-        this.enemy = this.physics.add.sprite(360, 200, 'musuh2').setScale(1.3);
-        // Set properti fisik pemain
-        this.enemy.setCollideWorldBounds(true);
-        this.enemy.setBounce(0.2); // Opsional, untuk memberi efek pantulan
-        // Tambahkan collider antara pemain dan platform
-        this.physics.add.collider(this.enemy, this.groundPlatform);
+        this.enemy2 = this.physics.add.sprite(360, 330, 'musuh2').setScale(1.3);
+        this.enemy2.setCollideWorldBounds(true);
+        this.enemy2.setBounce(0.2)
+        this.physics.add.collider(this.enemy2, this.groundPlatform);
         // Tambahkan pemain
-        this.player = this.physics.add.sprite(30, 200, 'knight').setScale(1.3);
+        this.player = this.physics.add.sprite(30, 310, 'knight').setScale(1.3);
         // Set properti fisik pemain
         this.player.setCollideWorldBounds(true);
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan

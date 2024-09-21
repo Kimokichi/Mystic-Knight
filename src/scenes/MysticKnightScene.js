@@ -48,16 +48,26 @@ export default class MysticKnightScene extends Phaser.Scene{
         for (let i = 0; i < 15; i++) {
             this.groundPlatform.create(38 + (i * 48), 380, 'tile').setScale(2).setOffset(-20, -13);
         }
+        this.enemy = this.physics.add.sprite(360, 330, 'musuh1').setScale(1.3);
+        this.enemy.setCollideWorldBounds(true);
+        this.enemy.setBounce(0.2)
+        this.physics.add.collider(this.enemy, this.groundPlatform);
         // Tambahkan pemain
-        this.player = this.physics.add.sprite(30, 200, 'knight').setScale(1.3);
+        this.player = this.physics.add.sprite(30, 310, 'knight').setScale(1.3);
         // Set properti fisik pemain
         this.player.setCollideWorldBounds(true);
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
         this.cursor=this.input.keyboard.createCursorKeys()
+        this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.enemy = this.physics.add.sprite(400, 330, this.enemy).setScale(1.3); 
+this.enemySpeed = 100;  this.enemyDirection = 1; 
+ this.enemyLeftBound = 300; 
+this.enemyRightBound = 350;
+this.physics.add.collider(this.enemy, this.groundPlatform);
         this.createAnimation()
-        this.add.image(360,365,'musuh1')
+        
     }
     update(){
         if(this.cursor.left.isDown){
@@ -86,7 +96,6 @@ export default class MysticKnightScene extends Phaser.Scene{
                 isJumping = false;
             });
         }
-        
         // Diagonal Jumping (left and up or right and up)
         if ((this.cursor.left.isDown && this.cursor.up.isDown) || (this.cursor.right.isDown && this.cursor.up.isDown)) {
             // Adjust velocity to make diagonal jumping smoother
@@ -97,6 +106,24 @@ export default class MysticKnightScene extends Phaser.Scene{
         if (!this.cursor.left.isDown && !this.cursor.right.isDown && !this.cursor.up.isDown) {
             this.player.anims.play('idle', true);
         }
+        if (this.attackKey.isDown) { 
+            this.attackWithKeyboard();
+             }
+            //  if(this.cursor.left.isDown){
+            //     this.enemy.setVelocity(-200,200).setFlipX(true)
+            //     this.enemy.anims.play('walking',true)
+            // }
+            // else if(this.cursor.right.isDown){
+            //     this.enemy.setVelocity(200,200).setFlipX(false)
+            //     this.enemy.anims.play('walking',true)
+            // }
+            else{
+                this.enemy.setVelocity(0,200)
+                this.enemy.anims.play('idlemusuh',true)
+            }
+            this.enemy.setVelocityX(this.enemySpeed * this.enemyDirection); 
+if (this.enemy.x >= this.enemyRightBound){ this.enemyDirection = -1; 
+ } else if (this.enemy.x <= this.enemyLeftBound) { this.enemyDirection = 1; }
         if(this.player.x > 680){
             this.scene.start('stage-2-scene')
         }
@@ -120,8 +147,24 @@ export default class MysticKnightScene extends Phaser.Scene{
         })
         this.anims.create({
             key : 'attack',
-            frames : this.anims.generateFrameNumbers('knight',{start : 92,end : 96}),
-            frameRate : 10
+            frames : this.anims.generateFrameNumbers('knight',{start : 92,end : 112}),
+            frameRate : 15,
+            repeat : 0
         })
+
+        //animasi musuh
+        this.anims.create({
+            key : 'idlemusuh',
+            frames : this.anims.generateFrameNumbers('musuh1',{start : 0, end : 2}),
+            frameRate : 5,
+            repeat : -1
+        })
+    }
+    attackWithKeyboard() {
+        this.player.setVelocity(0);
+        this.player.anims.play('attack', true);
+        this.time.delayedCall(2000, () => {
+            this.player.anims.play('idle', true);
+        });
     }
 }

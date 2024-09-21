@@ -46,7 +46,7 @@ export default class StageBossScene extends Phaser.Scene{
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
-        this.boss = this.physics.add.sprite(551, 200, 'boss').setScale(1.5);
+        this.boss = this.physics.add.sprite(551, 300, 'boss').setScale(1.5);
         // Set properti fisik pemain
         this.boss.setCollideWorldBounds(true);
         this.boss.setBounce(0.2); // Opsional, untuk memberi efek pantulan
