@@ -59,7 +59,7 @@ export default class StageBossScene extends Phaser.Scene{
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
         // Tambahkan musuh 1
-        this.boss = this.physics.add.sprite(360, 330, 'boss').setScale(1.3);
+        this.boss = this.physics.add.sprite(500, 300, 'boss').setScale(1.3);
         this.boss.setCollideWorldBounds(true);
         this.boss.setBounce(0.2);
         this.physics.add.collider(this.boss, this.groundPlatform);
@@ -68,7 +68,7 @@ export default class StageBossScene extends Phaser.Scene{
         this.bossSpeed = 100;
         this.bossDirection = 1;
         this.bossLeftBound = 270;
-        this.bossRightBound = 300;
+        this.bossRightBound = 500;
         this.physics.add.collider(this.boss, this.groundPlatform);
         this.lifeLabel = this.add.text(10,10,'Life', {
             fontSize : '16px',
@@ -117,7 +117,7 @@ export default class StageBossScene extends Phaser.Scene{
         }
             else{
                 this.boss.setVelocity(0,200)
-                this.boss.anims.play('walkmusuh',true)
+                this.boss.anims.play('bossjalan',true)
             }
                         // Logika pergerakan musuh 1
                         this.boss.setVelocityX(this.bossSpeed * this.bossDirection);
@@ -168,9 +168,8 @@ export default class StageBossScene extends Phaser.Scene{
         //enemy animation
         this.anims.create({
             key : 'bossjalan',
-            frames : this.anims.generateFrameNumbers('boss',{start : 8, end : 15}),
+            frames : this.anims.generateFrameNumbers('boss',{start : 8, end : 24}),
             frameRate : 10,
-            repeat : -1
         })
     }
     attackWithKeyboard() {
