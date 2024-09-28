@@ -111,6 +111,24 @@ export default class MysticKnightScene extends Phaser.Scene{
             fill : 'black',
             backgroundColor : 'white',
         }).setDepth(1)
+        this.physics.add.overlap(
+            this.player,
+            this.enemy1,
+            this.decreaseLife,
+            null,
+        )
+        this.physics.add.overlap(
+            this.player,
+            this.enemy2,
+            this.decreaseLife,
+            null,
+        )
+        this.physics.add.overlap(
+            this.player,
+            this.enemy3,
+            this.decreaseLife,
+            null,
+        )
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.createAnimation()
