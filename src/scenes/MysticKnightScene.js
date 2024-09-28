@@ -116,18 +116,21 @@ export default class MysticKnightScene extends Phaser.Scene{
             this.enemy1,
             this.decreaseLife,
             null,
+            this
         )
         this.physics.add.overlap(
             this.player,
             this.enemy2,
             this.decreaseLife,
             null,
+            this
         )
         this.physics.add.overlap(
             this.player,
             this.enemy3,
             this.decreaseLife,
             null,
+            this
         )
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
