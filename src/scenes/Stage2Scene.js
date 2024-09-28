@@ -12,7 +12,14 @@ export default class Stage2Scene extends Phaser.Scene{
         this.playerAttack = false
         this.enemyAttack = false
         this.lifeLabel = undefined
-        this.life = 3
+        if (!this.registry.get('life')) {
+            this.registry.set('life', 10);          }
+        this.life = this.registry.get('life');
+        // this.life = 10
+        this.playerVulnerable = true
+        this.timer = 10
+        this.timerLabel = undefined
+        this.countdown = undefined
     }
     preload(){
         this.load.image('bg01','images/bg1.png')
@@ -94,6 +101,21 @@ export default class Stage2Scene extends Phaser.Scene{
             fill : 'black',
             backgroundColor : 'white',
         }).setDepth(1)
+        this.physics.add.overlap(
+            this.player,
+            this.enemy4,
+            this.decreaseLife,
+            null,
+            this
+        )
+        this.physics.add.overlap(
+            this.player,
+            this.enemy5,
+            this.decreaseLife,
+            null,
+            this
+        )
+        this.life = this.registry.get('life');
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.createAnimation()
@@ -212,14 +234,26 @@ export default class Stage2Scene extends Phaser.Scene{
             this.player.anims.play('idle', true);
         });
     }
-    decreaseLife(){
-        this.life--
-        if (this.life == 2){
-            this.player.setTint(0xff0000)
-        }else if (this.life == 1){
-            this.player.setTint(0xff0000).setAlpha(0.2)
-        }else if (this.life == 0){
-        this.scene.start('over-scene')
-        }
+    decreaseLife() {
+        if (!this.registry.get('life')) {
+                    this.registry.set('life', 10);          }
+                this.life = this.registry.get('life');
+        if (this.playerVulnerable) {
+                    this.life--;
+                    this.registry.set('life', this.life);  // Simpan nyawa ke dalam registry
+        
+                    if (this.life == 2) {
+                        this.player.setTint(0xff0000);
+                    } else if (this.life == 1) {
+                        this.player.setTint(0xff0000).setAlpha(0.2);
+                    } else if (this.life == 0) {
+                        this.scene.start('over-scene');
+                    }
+        
+                    this.playerVulnerable = false;
+                    this.time.delayedCall(1000, () => {
+                        this.playerVulnerable = true;
+                    });
+                }
     }
 }

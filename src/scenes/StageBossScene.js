@@ -11,7 +11,14 @@ export default class StageBossScene extends Phaser.Scene{
         this.playerAttack = false
         this.playerAttack = false
         this.lifeLabel = undefined
-        this.life = 3
+        if (!this.registry.get('life')) {
+            this.registry.set('life', 10);          }
+        this.life = this.registry.get('life');
+        // this.life = 10
+        this.playerVulnerable = true
+        this.timer = 10
+        this.timerLabel = undefined
+        this.countdown = undefined
     }
     preload(){
         this.load.image('bossbackground','images/bossbackground.png')
@@ -51,11 +58,17 @@ export default class StageBossScene extends Phaser.Scene{
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
-        this.boss = this.physics.add.sprite(551, 300, 'boss').setScale(1.5);
-        // Set properti fisik pemain
+        // Tambahkan musuh 1
+        this.boss = this.physics.add.sprite(360, 330, 'boss').setScale(1.3);
         this.boss.setCollideWorldBounds(true);
-        this.boss.setBounce(0.2); // Opsional, untuk memberi efek pantulan
-        // Tambahkan collider antara pemain dan platform
+        this.boss.setBounce(0.2);
+        this.physics.add.collider(this.boss, this.groundPlatform);
+        
+        // Atur musuh 1
+        this.bossSpeed = 100;
+        this.bossDirection = 1;
+        this.bossLeftBound = 270;
+        this.bossRightBound = 300;
         this.physics.add.collider(this.boss, this.groundPlatform);
         this.lifeLabel = this.add.text(10,10,'Life', {
             fontSize : '16px',
@@ -63,6 +76,14 @@ export default class StageBossScene extends Phaser.Scene{
             fill : 'black',
             backgroundColor : 'white',
         }).setDepth(1)
+        this.physics.add.overlap(
+            this.player,
+            this.boss,
+            this.decreaseLife,
+            null,
+            this
+        )
+        this.life = this.registry.get('life');
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.createAnimation()
@@ -94,7 +115,19 @@ export default class StageBossScene extends Phaser.Scene{
                 isJumping = false;
             });
         }
-        this.boss.anims.play('bossidle',true)
+            else{
+                this.boss.setVelocity(0,200)
+                this.boss.anims.play('walkmusuh',true)
+            }
+                        // Logika pergerakan musuh 1
+                        this.boss.setVelocityX(this.bossSpeed * this.bossDirection);
+                        if (this.boss.x >= this.bossRightBound) {
+                            this.bossDirection = -1;
+                            this.boss.setFlipX(false)
+                        } else if (this.boss.x <= this.bossLeftBound) {
+                            this.bossDirection = 1;
+                            this.boss.setFlipX(true)
+                        }
         // Diagonal Jumping (left and up or right and up)
         if ((this.cursor.left.isDown && this.cursor.up.isDown) || (this.cursor.right.isDown && this.cursor.up.isDown)) {
             // Adjust velocity to make diagonal jumping smoother
@@ -134,8 +167,8 @@ export default class StageBossScene extends Phaser.Scene{
         })
         //enemy animation
         this.anims.create({
-            key : 'bossidle',
-            frames : this.anims.generateFrameNumbers('boss',{start : 0, end : 7}),
+            key : 'bossjalan',
+            frames : this.anims.generateFrameNumbers('boss',{start : 8, end : 15}),
             frameRate : 10,
             repeat : -1
         })
@@ -147,14 +180,26 @@ export default class StageBossScene extends Phaser.Scene{
             this.player.anims.play('idle', true);
         });
     }
-    decreaseLife(){
-        this.life--
-        if (this.life == 2){
-            this.player.setTint(0xff0000)
-        }else if (this.life == 1){
-            this.player.setTint(0xff0000).setAlpha(0.2)
-        }else if (this.life == 0){
-        this.scene.start('over-scene')
-        }
+    decreaseLife() {
+        if (!this.registry.get('life')) {
+                    this.registry.set('life', 10);          }
+                this.life = this.registry.get('life');
+        if (this.playerVulnerable) {
+                    this.life--;
+                    this.registry.set('life', this.life);  // Simpan nyawa ke dalam registry
+        
+                    if (this.life == 2) {
+                        this.player.setTint(0xff0000);
+                    } else if (this.life == 1) {
+                        this.player.setTint(0xff0000).setAlpha(0.2);
+                    } else if (this.life == 0) {
+                        this.scene.start('over-scene');
+                    }
+        
+                    this.playerVulnerable = false;
+                    this.time.delayedCall(1000, () => {
+                        this.playerVulnerable = true;
+                    });
+                }
     }
 }

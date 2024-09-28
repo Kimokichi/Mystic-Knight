@@ -12,7 +12,14 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.playerAttack = false
         this.enemyAttack = false
         this.lifeLabel = undefined
-        this.life = 3
+        if (!this.registry.get('life')) {
+            this.registry.set('life', 10);          }
+        this.life = this.registry.get('life');
+        // this.life = 10
+        this.playerVulnerable = true
+        this.timer = 10
+        this.timerLabel = undefined
+        this.countdown = undefined
     }
     preload(){
         this.load.image('bg1','images/plx-1.png')
@@ -105,6 +112,9 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.player.setBounce(0.2); // Opsional, untuk memberi efek pantulan
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
+        this.timerLabel = this.add.text(360,10,'Time :',{
+
+        })
         this.lifeLabel = this.add.text(10,10,'Life', {
             fontSize : '16px',
             // @ts-ignore
@@ -266,14 +276,26 @@ export default class MysticKnightScene extends Phaser.Scene{
             this.player.anims.play('idle', true);
         });
     }
-    decreaseLife(){
-        this.life--
-        if (this.life == 2){
-            this.player.setTint(0xff0000)
-        }else if (this.life == 1){
-            this.player.setTint(0xff0000).setAlpha(0.2)
-        }else if (this.life == 0){
-        this.scene.start('over-scene')
-        }
+    decreaseLife() {
+        if (!this.registry.get('life')) {
+                    this.registry.set('life', 10);          }
+                this.life = this.registry.get('life');
+        if (this.playerVulnerable) {
+                    this.life--;
+                    this.registry.set('life', this.life);  // Simpan nyawa ke dalam registry
+        
+                    if (this.life == 2) {
+                        this.player.setTint(0xff0000);
+                    } else if (this.life == 1) {
+                        this.player.setTint(0xff0000).setAlpha(0.2);
+                    } else if (this.life == 0) {
+                        this.scene.start('over-scene');
+                    }
+        
+                    this.playerVulnerable = false;
+                    this.time.delayedCall(1000, () => {
+                        this.playerVulnerable = true;
+                    });
+                }
     }
 }

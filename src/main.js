@@ -16,7 +16,7 @@ const config = {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
-			// debug : true
+			debug : true
 		},
 	},
 	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene,OverScene],
