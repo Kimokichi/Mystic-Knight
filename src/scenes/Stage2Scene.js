@@ -193,6 +193,7 @@ export default class Stage2Scene extends Phaser.Scene{
                 this.enemy5Direction = 1;
                 this.enemy5.setFlipX(true)
             }
+            this.timerLabel.setText('Timer = ' + this.time)
             this.lifeLabel.setText('Life = ' + this.life)
         if(this.player.x > 680){
             this.scene.start('stage-boss-scene')

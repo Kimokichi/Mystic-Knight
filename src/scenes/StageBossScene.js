@@ -19,6 +19,7 @@ export default class StageBossScene extends Phaser.Scene{
         this.timer = 10
         this.timerLabel = undefined
         this.countdown = undefined
+        this.isOverlapping = undefined
     }
     preload(){
         this.load.image('bossbackground','images/bossbackground.png')
@@ -70,6 +71,12 @@ export default class StageBossScene extends Phaser.Scene{
         this.bossLeftBound = 270;
         this.bossRightBound = 500;
         this.physics.add.collider(this.boss, this.groundPlatform);
+        this.timerLabel = this.add.text(360,10,'Time :',{
+            fontSize : '16px',
+            // @ts-ignore
+            fill : 'white',
+            backgroundColor : 'black'
+        }).setDepth(1)
         this.lifeLabel = this.add.text(10,10,'Life', {
             fontSize : '16px',
             // @ts-ignore
@@ -87,6 +94,14 @@ export default class StageBossScene extends Phaser.Scene{
         this.cursor=this.input.keyboard.createCursorKeys()
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.createAnimation()
+        this.physics.add.overlap(this.player, this.boss, this.bossAttack, null, this);
+        this.bossIsAttacking = false;
+        this.boss.on('animationcomplete', (animation) => {
+            if (animation.key === 'bossnyerang') {
+                this.bossIsAttacking = false;  
+                this.boss.play('bossjalan', true);  
+            }
+        });
     }
     update(){
         if(this.cursor.left.isDown){
@@ -103,31 +118,55 @@ export default class StageBossScene extends Phaser.Scene{
         }
         let isJumping = false;
         // Vertical Movement (Jump)
-        if (this.cursor.up.isDown && !isJumping) {
-            // Start the jump
+        // if (this.cursor.up.isDown && !isJumping) {
+        //     // Start the jump
+        //     this.player.setVelocityY(-200);
+        //     this.player.anims.play('jumping', true);
+        //     isJumping = true;
+        //     // Set a timer to limit the jump duration (adjust the delay as needed)
+        //     this.time.delayedCall(800, () => {
+        //         // Stop the jump after the specified delay (500 milliseconds in this example)
+        //         this.player.setVelocityY(200); // Apply downward velocity to end the jump
+        //         isJumping = false;
+        //     });
+        // }
+        //     else{
+        //         this.boss.setVelocity(0,200)
+        //         this.boss.anims.play('bossjalan',true)
+        //     }
+        //                 // Logika pergerakan musuh 1
+        //                 this.boss.setVelocityX(this.bossSpeed * this.bossDirection);
+        //                 if (this.boss.x >= this.bossRightBound) {
+        //                     this.bossDirection = -1;
+        //                     this.boss.setFlipX(false)
+        //                 } else if (this.boss.x <= this.bossLeftBound) {
+        //                     this.bossDirection = 1;
+        //                     this.boss.setFlipX(true)
+        //                 }
+        if (this.cursor.up.isDown && !this.isJumping) {
             this.player.setVelocityY(-200);
             this.player.anims.play('jumping', true);
-            isJumping = true;
-            // Set a timer to limit the jump duration (adjust the delay as needed)
+            this.isJumping = true;
             this.time.delayedCall(800, () => {
-                // Stop the jump after the specified delay (500 milliseconds in this example)
-                this.player.setVelocityY(200); // Apply downward velocity to end the jump
-                isJumping = false;
+                this.player.setVelocityY(200);
+                this.isJumping = false;
             });
-        }
-            else{
-                this.boss.setVelocity(0,200)
-                this.boss.anims.play('bossjalan',true)
+        } else {
+            if (!this.bossIsAttacking) {
+                this.boss.setVelocity(0, 200);                  
+                this.boss.anims.play('bossjalan', true);
             }
-                        // Logika pergerakan musuh 1
-                        this.boss.setVelocityX(this.bossSpeed * this.bossDirection);
-                        if (this.boss.x >= this.bossRightBound) {
-                            this.bossDirection = -1;
-                            this.boss.setFlipX(false)
-                        } else if (this.boss.x <= this.bossLeftBound) {
-                            this.bossDirection = 1;
-                            this.boss.setFlipX(true)
-                        }
+        }
+        if (!this.bossIsAttacking) {
+            this.boss.setVelocityX(this.bossSpeed * this.bossDirection);
+            if (this.boss.x >= this.bossRightBound) {
+                this.bossDirection = -1;
+                this.boss.setFlipX(false);
+            } else if (this.boss.x <= this.bossLeftBound) {
+                this.bossDirection = 1;
+                this.boss.setFlipX(true);
+            }
+        }
         // Diagonal Jumping (left and up or right and up)
         if ((this.cursor.left.isDown && this.cursor.up.isDown) || (this.cursor.right.isDown && this.cursor.up.isDown)) {
             // Adjust velocity to make diagonal jumping smoother
@@ -141,6 +180,7 @@ export default class StageBossScene extends Phaser.Scene{
         if (this.attackKey.isDown) { 
             this.attackWithKeyboard();
         }
+        this.timerLabel.setText('Timer = ' + this.timer)
         this.lifeLabel.setText('Life = ' + this.life)
     }
     createAnimation(){
@@ -168,7 +208,12 @@ export default class StageBossScene extends Phaser.Scene{
         //enemy animation
         this.anims.create({
             key : 'bossjalan',
-            frames : this.anims.generateFrameNumbers('boss',{start : 8, end : 24}),
+            frames : this.anims.generateFrameNumbers('boss',{start : 8, end : 15}),
+            frameRate : 10,
+        })
+        this.anims.create({
+            key : 'bossnyerang',
+            frames : this.anims.generateFrameNumbers('boss',{start : 16, end : 25}),
             frameRate : 10,
         })
     }
@@ -178,6 +223,12 @@ export default class StageBossScene extends Phaser.Scene{
         this.time.delayedCall(2000, () => {
             this.player.anims.play('idle', true);
         });
+    }
+    gameOver(){
+        this.timer--
+        if(this.timer <0){
+            this.scene.start('over-scene')
+        }
     }
     decreaseLife() {
         if (!this.registry.get('life')) {
@@ -200,5 +251,17 @@ export default class StageBossScene extends Phaser.Scene{
                         this.playerVulnerable = true;
                     });
                 }
+    }
+    bossAttack() {
+        if (!this.bossIsAttacking) {
+            this.bossIsAttacking = true;
+            this.boss.play('bossnyerang', true);  
+            
+            this.boss.on('animationcomplete', (animation) => {
+                if (animation.key === 'bossnyerang') {
+                    this.bossIsAttacking = false;                      this.boss.play('bossjalan', true);
+                }
+            });
+        }
     }
 }

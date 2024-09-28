@@ -113,8 +113,9 @@ export default class MysticKnightScene extends Phaser.Scene{
         // Tambahkan collider antara pemain dan platform
         this.physics.add.collider(this.player, this.groundPlatform);
         this.timerLabel = this.add.text(360,10,'Time :',{
-
-        })
+            // @ts-ignore
+            fill : 'white', backgroundColor : 'black'
+        }).setDepth(1)
         this.lifeLabel = this.add.text(10,10,'Life', {
             fontSize : '16px',
             // @ts-ignore
@@ -229,6 +230,7 @@ export default class MysticKnightScene extends Phaser.Scene{
                 this.enemy3Direction = 1;
                 this.enemy3.setFlipX(true)
             }
+            this.timerLabel.setText('Timer = ' + this.time)
             this.lifeLabel.setText('Life = ' + this.life)
             // this.enemy1.setVelocityX(this.enemy1Speed * this.enemyDirection); 
                 // if (this.enemy1.x >= this.enemy1RightBound){ this.enemyDirection = -1; 
@@ -275,6 +277,12 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.time.delayedCall(2000, () => {
             this.player.anims.play('idle', true);
         });
+    }
+    gameOver(){
+        this.timer--
+        if(this.timer <0){
+            this.scene.start('over-scene')
+        }
     }
     decreaseLife() {
         if (!this.registry.get('life')) {
