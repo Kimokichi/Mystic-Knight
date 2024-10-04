@@ -19,8 +19,8 @@ const config = {
 			debug : true
 		},
 	},
-	// scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene,OverScene],
-	scene: [StageBossScene],
+	scene: [StartScene,MysticKnightScene,Stage2Scene,StageBossScene,WinScene,OverScene],
+	// scene: [Stage2Scene],
 }
 
 

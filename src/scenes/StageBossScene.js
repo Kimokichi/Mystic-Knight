@@ -182,6 +182,9 @@ export default class StageBossScene extends Phaser.Scene{
         }
         this.timerLabel.setText('Timer = ' + this.timer)
         this.lifeLabel.setText('Life = ' + this.life)
+        if(this.player.x > 680){
+            this.scene.start('win-scene')
+        }
     }
     createAnimation(){
         this.anims.create({

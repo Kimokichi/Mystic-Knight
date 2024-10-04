@@ -193,7 +193,7 @@ export default class Stage2Scene extends Phaser.Scene{
                 this.enemy5Direction = 1;
                 this.enemy5.setFlipX(true)
             }
-            this.timerLabel.setText('Timer = ' + this.time)
+            // this.timerLabel.setText('Timer = ' + this.timer)
             this.lifeLabel.setText('Life = ' + this.life)
         if(this.player.x > 680){
             this.scene.start('stage-boss-scene')
@@ -234,6 +234,12 @@ export default class Stage2Scene extends Phaser.Scene{
         this.time.delayedCall(2000, () => {
             this.player.anims.play('idle', true);
         });
+    }
+    gameOver(){
+        this.timer--
+        if(this.timer <0){
+            this.scene.start('over-scene')
+        }
     }
     decreaseLife() {
         if (!this.registry.get('life')) {

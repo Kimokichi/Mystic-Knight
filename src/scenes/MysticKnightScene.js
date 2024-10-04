@@ -17,6 +17,7 @@ export default class MysticKnightScene extends Phaser.Scene{
         this.life = this.registry.get('life');
         // this.life = 10
         this.playerVulnerable = true
+        this.startGame = false
         this.timer = 10
         this.timerLabel = undefined
         this.countdown = undefined
@@ -230,11 +231,13 @@ export default class MysticKnightScene extends Phaser.Scene{
                 this.enemy3Direction = 1;
                 this.enemy3.setFlipX(true)
             }
-            this.timerLabel.setText('Timer = ' + this.time)
             this.lifeLabel.setText('Life = ' + this.life)
             // this.enemy1.setVelocityX(this.enemy1Speed * this.enemyDirection); 
                 // if (this.enemy1.x >= this.enemy1RightBound){ this.enemyDirection = -1; 
                 //  } else if (this.enemy1.x <= this.enemy1LeftBound) { this.enemyDirection = 1; }
+                if(this.startGame = true){
+                    this.timerLabel.setText('Timer :'+ this.timer)
+                }
         if(this.player.x > 680){
             this.scene.start('stage-2-scene')
         }
@@ -278,9 +281,18 @@ export default class MysticKnightScene extends Phaser.Scene{
             this.player.anims.play('idle', true);
         });
     }
+    gameStart(){
+        this.startGame = true
+        this.countdown = this.time.addEvent ({
+            delay:1,
+            callback : this.gameOver,
+            callbackScope: this,
+            loop : true
+        })
+    }
     gameOver(){
         this.timer--
-        if(this.timer <0){
+        if(this.timer < 0){
             this.scene.start('over-scene')
         }
     }
